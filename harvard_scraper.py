@@ -12,13 +12,13 @@ def create_webdriver_instance(): #works better than chrome for some reason
     return driver
 
 def find_table(driver): #adds table data of each page to dataframe
+    print('scraping data...')
     table = driver.find_element_by_xpath('//*[@id="chart1"]/div/div[1]/table')
     rows = table.find_elements_by_tag_name('tr')
     for row in rows:
         cells = row.find_elements_by_tag_name('td')
         row_data = [cell.text for cell in cells]
         data.append(row_data)
-
     return True
 
 def click_next(driver):
@@ -32,9 +32,11 @@ def run():
     driver.maximize_window()
     sleep(5)
 
-    for _ in range(9):
+    for _ in range(9): #9 button clicks to get to the end
         find_table(driver) 
         click_next(driver)
+    driver.quit()
+    print('Scraping complete! Data is located in output.xlsx')
     return True
 
 if __name__ == '__main__':
